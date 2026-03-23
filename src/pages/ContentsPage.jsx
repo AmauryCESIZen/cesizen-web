@@ -6,6 +6,7 @@ import {
   updateContent,
 } from "../services/contentService";
 import { getAllCategories } from "../services/categoryService";
+import StatusBadge from "../components/StatusBadge";
 
 const initialForm = {
   title: "",
@@ -209,84 +210,78 @@ export default function ContentsPage() {
       </div>
 
       <div className="card">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Titre</th>
-              <th>Catégories</th>
-              <th>Statut</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {contents.length === 0 ? (
+        <div className="table-wrapper">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="6">Aucun contenu trouvé.</td>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Catégories</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
-            ) : (
-              contents.map((content) => (
-                <tr key={content.id}>
-                  <td>{content.id}</td>
-                  <td>{content.title}</td>
+            </thead>
 
-                  <td>
-                    {content.categories && content.categories.length > 0 ? (
-                      <div className="tag-list">
-                        {content.categories.map((category) => (
-                          <span key={category.id} className="tag">
-                            {category.name}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-muted">Aucune</span>
-                    )}
-                  </td>
-
-                  <td>
-                    <span
-                      className={
-                        content.status === "PUBLIE"
-                          ? "badge badge-success"
-                          : "badge badge-muted"
-                      }
-                    >
-                      {content.status}
-                    </span>
-                  </td>
-
-                  <td>{new Date(content.created_at).toLocaleString("fr-FR")}</td>
-
-                  <td className="actions">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handleEdit(content)}
-                    >
-                      Modifier
-                    </button>
-
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => handleToggleStatus(content)}
-                    >
-                      {content.status === "PUBLIE" ? "Dépublier" : "Publier"}
-                    </button>
-
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(content.id)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
+            <tbody>
+              {contents.length === 0 ? (
+                <tr>
+                  <td colSpan="6">Aucun contenu trouvé.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                contents.map((content) => (
+                  <tr key={content.id}>
+                    <td>{content.id}</td>
+                    <td>{content.title}</td>
+
+                    <td>
+                      {content.categories && content.categories.length > 0 ? (
+                        <div className="tag-list">
+                          {content.categories.map((category) => (
+                            <span key={category.id} className="tag">
+                              {category.name}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted">Aucune</span>
+                      )}
+                    </td>
+
+                    <td>
+                      <StatusBadge value={content.status} />    
+                    </td>
+
+                    <td>{new Date(content.created_at).toLocaleString("fr-FR")}</td>
+
+                    <td className="actions">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleEdit(content)}
+                      >
+                        Modifier
+                      </button>
+
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => handleToggleStatus(content)}
+                      >
+                        {content.status === "PUBLIE" ? "Dépublier" : "Publier"}
+                      </button>
+
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(content.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

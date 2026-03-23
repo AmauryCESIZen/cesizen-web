@@ -128,49 +128,51 @@ export default function CategoriesPage() {
       </div>
 
       <div className="card">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nom</th>
-              <th>Date de création</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {categories.length === 0 ? (
+        <div className="table-wrapper">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="4">Aucune catégorie trouvée.</td>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Date de création</th>
+                <th>Actions</th>
               </tr>
-            ) : (
-              categories.map((category) => (
-                <tr key={category.id}>
-                  <td>{category.id}</td>
-                  <td>{category.name}</td>
-                  <td>
-                    {new Date(category.created_at).toLocaleString("fr-FR")}
-                  </td>
-                  <td className="actions">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handleEdit(category)}
-                    >
-                      Modifier
-                    </button>
+            </thead>
 
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(category.id)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
+            <tbody>
+              {categories.length === 0 ? (
+                <tr>
+                  <td colSpan="4">Aucune catégorie trouvée.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                categories.map((category) => (
+                  <tr key={category.id}>
+                    <td>{category.id}</td>
+                    <td>{category.name}</td>
+                    <td>
+                      {new Date(category.created_at).toLocaleString("fr-FR")}
+                    </td>
+                    <td className="actions">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleEdit(category)}
+                      >
+                        Modifier
+                      </button>
+
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(category.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );
