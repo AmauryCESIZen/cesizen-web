@@ -11,7 +11,6 @@ export default function DashboardPage() {
     try {
       setLoading(true);
       setError("");
-
       const data = await getDashboardData();
       setDashboard(data);
     } catch (err) {
@@ -50,11 +49,11 @@ export default function DashboardPage() {
 
   return (
     <section className="dashboard-page">
-      <div className="dashboard-header">
+      <div className="dashboard-hero card">
         <div>
           <h1>Dashboard</h1>
           <p className="text-muted">
-            Vue d’ensemble du back-office CESIZen.
+            Bienvenue dans le back-office CESIZen.
           </p>
         </div>
 
@@ -64,37 +63,42 @@ export default function DashboardPage() {
       </div>
 
       <div className="dashboard-grid">
-        <div className="dashboard-card">
+        <Link to="/admin/users" className="dashboard-card dashboard-link-card">
           <span className="dashboard-label">Utilisateurs</span>
           <strong className="dashboard-value">{stats.users}</strong>
-          <span className="dashboard-subtext">
-            {stats.activeUsers} actifs
-          </span>
-        </div>
+          <span className="dashboard-subtext">{stats.activeUsers} actifs</span>
+        </Link>
 
-        <div className="dashboard-card">
+        <Link
+          to="/admin/contents"
+          className="dashboard-card dashboard-link-card"
+        >
           <span className="dashboard-label">Contenus</span>
           <strong className="dashboard-value">{stats.contents}</strong>
           <span className="dashboard-subtext">
             {stats.publishedContents} publiés
           </span>
-        </div>
+        </Link>
 
-        <div className="dashboard-card">
+        <Link
+          to="/admin/categories"
+          className="dashboard-card dashboard-link-card"
+        >
           <span className="dashboard-label">Catégories</span>
           <strong className="dashboard-value">{stats.categories}</strong>
-          <span className="dashboard-subtext">
-            Organisation des contenus
-          </span>
-        </div>
+          <span className="dashboard-subtext">Organisation des contenus</span>
+        </Link>
 
-        <div className="dashboard-card">
+        <Link
+          to="/admin/presets"
+          className="dashboard-card dashboard-link-card"
+        >
           <span className="dashboard-label">Presets respiration</span>
           <strong className="dashboard-value">{stats.presets}</strong>
           <span className="dashboard-subtext">
             {stats.activePresets} actifs
           </span>
-        </div>
+        </Link>
       </div>
 
       <div className="dashboard-sections">
@@ -153,9 +157,11 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="card">
+        <div className="card dashboard-section-full">
           <div className="section-header">
             <h2>Derniers contenus</h2>
+            <p className="text-muted">
+            </p>
           </div>
 
           {recentContents.length === 0 ? (
