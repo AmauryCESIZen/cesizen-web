@@ -12,6 +12,7 @@ export default function CategoriesPage() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const loadCategories = async () => {
     try {
@@ -36,11 +37,19 @@ export default function CategoriesPage() {
   const resetForm = () => {
     setName("");
     setEditingId(null);
+    setIsFormOpen(false);
+  };
+
+  const handleCreateClick = () => {
+    resetForm();
+    setIsFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleEdit = (category) => {
     setEditingId(category.id);
     setName(category.name);
+    setIsFormOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -91,30 +100,62 @@ export default function CategoriesPage() {
 
   return (
     <section>
-      <h1>Catégories</h1>
+      <div className="page-header">
+        <div>
+          <h1>Catégories</h1>
+          <p className="text-muted">
+            Gérer les catégories utilisées pour classer les contenus.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleCreateClick}
+        >
+          Créer une catégorie
+        </button>
+      </div>
 
       {error && <p className="error">{error}</p>}
 
-      <div className="card form-card">
-        <h2>{editingId ? "Modifier une catégorie" : "Créer une catégorie"}</h2>
+      {isFormOpen && (
+        <div className="card form-card">
+          <div className="form-card-header">
+            <div>
+              <h2>
+                {editingId ? "Modifier une catégorie" : "Créer une catégorie"}
+              </h2>
+              <p className="text-muted">
+                Renseigne le nom de la catégorie puis enregistre.
+              </p>
+            </div>
 
-        <form className="admin-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Nom</label>
-            <input
-              type="text"
-              placeholder="Nom de la catégorie"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={resetForm}
+            >
+              Fermer
+            </button>
           </div>
 
-          <div className="form-actions">
-            <button className="btn btn-primary" type="submit">
-              {editingId ? "Enregistrer" : "Créer"}
-            </button>
+          <form className="admin-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Nom</label>
+              <input
+                type="text"
+                placeholder="Nom de la catégorie"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-            {editingId && (
+            <div className="form-actions">
+              <button className="btn btn-primary" type="submit">
+                {editingId ? "Enregistrer" : "Créer"}
+              </button>
+
               <button
                 className="btn btn-secondary"
                 type="button"
@@ -122,10 +163,10 @@ export default function CategoriesPage() {
               >
                 Annuler
               </button>
-            )}
-          </div>
-        </form>
-      </div>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="card">
         <div className="table-wrapper">
@@ -162,6 +203,7 @@ export default function CategoriesPage() {
                     <td>
                       <div className="table-actions">
                         <button
+                          type="button"
                           className="btn btn-primary"
                           onClick={() => handleEdit(category)}
                         >
@@ -169,6 +211,7 @@ export default function CategoriesPage() {
                         </button>
 
                         <button
+                          type="button"
                           className="btn btn-danger"
                           onClick={() => handleDelete(category.id)}
                         >

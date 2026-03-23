@@ -15,6 +15,11 @@ const initialForm = {
   categoryIds: [],
 };
 
+  const truncate = (text, max = 90) => {
+  if (!text) return "";
+  return text.length > max ? `${text.slice(0, max)}…` : text;
+};
+
 export default function ContentsPage() {
   const [contents, setContents] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -22,6 +27,7 @@ export default function ContentsPage() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const loadData = async () => {
     try {
@@ -67,7 +73,7 @@ export default function ContentsPage() {
     });
   };
 
-  const handleEdit = async (content) => {
+  const handleEdit = (content) => {
     setEditingId(content.id);
     setForm({
       title: content.title || "",
@@ -75,12 +81,14 @@ export default function ContentsPage() {
       status: content.status || "BROUILLON",
       categoryIds: (content.categories || []).map((cat) => cat.id),
     });
+    setIsFormOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const resetForm = () => {
     setEditingId(null);
     setForm(initialForm);
+    setIsFormOpen(false);
   };
 
   const handleSubmit = async (e) => {
@@ -126,10 +134,13 @@ export default function ContentsPage() {
     }
   };
 
-  const truncate = (text, max = 90) => {
-  if (!text) return "";
-  return text.length > max ? `${text.slice(0, max)}…` : text;
-};
+  const handleCreateClick = () => {
+    resetForm();
+    setIsFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+
 
   if (loading) {
     return (
@@ -142,66 +153,104 @@ export default function ContentsPage() {
 
   return (
     <section>
-      <h1>Contenus</h1>
+      <div className="page-header">
+        <div>
+          <h1>Contenus</h1>
+          <p className="text-muted">
+            Gérer les contenus
+          </p>
+        </div>
+
+        <button className="btn btn-primary" onClick={handleCreateClick}>
+          Créer un contenu
+        </button>
+      </div>
 
       {error && <p className="error">{error}</p>}
 
-      <div className="card form-card">
-        <h2>{editingId ? "Modifier un contenu" : "Créer un contenu"}</h2>
-
-        <form className="admin-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Titre</label>
-            <input
-              type="text"
-              name="title"
-              value={form.title}
-              onChange={handleChange}
-              placeholder="Titre du contenu"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Contenu</label>
-            <textarea
-              name="body"
-              value={form.body}
-              onChange={handleChange}
-              placeholder="Rédiger le contenu..."
-              rows={6}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Statut</label>
-            <select name="status" value={form.status} onChange={handleChange}>
-              <option value="BROUILLON">Brouillon</option>
-              <option value="PUBLIE">Publié</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Catégories</label>
-            <div className="checkbox-list">
-              {categories.map((category) => (
-                <label key={category.id} className="checkbox-item">
-                  <input
-                    type="checkbox"
-                    checked={form.categoryIds.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
-                  />
-                  <span>{category.name}</span>
-                </label>
-              ))}
+      {isFormOpen && (
+        <div className="card form-card">
+          <div className="form-card-header">
+            <div>
+              <h2>{editingId ? "Modifier un contenu" : "Créer un contenu"}</h2>
+              <p className="text-muted">
+                Remplis les informations puis enregistre.
+              </p>
             </div>
+
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={resetForm}
+            >
+              Fermer
+            </button>
           </div>
 
-          <div className="form-actions">
-            <button className="btn btn-primary" type="submit">
-              {editingId ? "Enregistrer" : "Créer"}
-            </button>
+          <form className="admin-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Titre</label>
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                placeholder="Titre du contenu"
+              />
+            </div>
 
-            {editingId && (
+            <div className="form-group">
+              <label>Contenu</label>
+              <textarea
+                name="body"
+                value={form.body}
+                onChange={handleChange}
+                placeholder="Rédiger le contenu..."
+                rows={6}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Statut</label>
+              <select name="status" value={form.status} onChange={handleChange}>
+                <option value="BROUILLON">Brouillon</option>
+                <option value="PUBLIE">Publié</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Catégories</label>
+              <div className="checkbox-list">
+                {categories.map((category) => (
+                  <label key={category.id} className="checkbox-item">
+                    <input
+                      type="checkbox"
+                      checked={form.categoryIds.includes(category.id)}
+                      onChange={() => handleCategoryChange(category.id)}
+                    />
+                    <span>{category.name}</span>
+                  </label>
+                ))}
+              </div>
+
+              {form.categoryIds.length > 0 && (
+                <div className="tag-list">
+                  {categories
+                    .filter((category) => form.categoryIds.includes(category.id))
+                    .map((category) => (
+                      <span key={category.id} className="tag">
+                        {category.name}
+                      </span>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            <div className="form-actions">
+              <button className="btn btn-primary" type="submit">
+                {editingId ? "Enregistrer" : "Créer"}
+              </button>
+
               <button
                 className="btn btn-secondary"
                 type="button"
@@ -209,10 +258,10 @@ export default function ContentsPage() {
               >
                 Annuler
               </button>
-            )}
-          </div>
-        </form>
-      </div>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="card">
         <div className="table-wrapper">
