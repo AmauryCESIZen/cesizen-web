@@ -214,6 +214,7 @@ export default function ContentsPage() {
             <tr>
               <th>ID</th>
               <th>Titre</th>
+              <th>Catégories</th>
               <th>Statut</th>
               <th>Date</th>
               <th>Actions</th>
@@ -223,13 +224,28 @@ export default function ContentsPage() {
           <tbody>
             {contents.length === 0 ? (
               <tr>
-                <td colSpan="5">Aucun contenu trouvé.</td>
+                <td colSpan="6">Aucun contenu trouvé.</td>
               </tr>
             ) : (
               contents.map((content) => (
                 <tr key={content.id}>
                   <td>{content.id}</td>
                   <td>{content.title}</td>
+
+                  <td>
+                    {content.categories && content.categories.length > 0 ? (
+                      <div className="tag-list">
+                        {content.categories.map((category) => (
+                          <span key={category.id} className="tag">
+                            {category.name}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-muted">Aucune</span>
+                    )}
+                  </td>
+
                   <td>
                     <span
                       className={
@@ -241,7 +257,9 @@ export default function ContentsPage() {
                       {content.status}
                     </span>
                   </td>
+
                   <td>{new Date(content.created_at).toLocaleString("fr-FR")}</td>
+
                   <td className="actions">
                     <button
                       className="btn btn-primary"
