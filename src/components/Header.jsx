@@ -12,7 +12,7 @@ export default function Header() {
       try {
         const result = await getMe();
         setMe(result.data);
-      } catch (err) {
+      } catch {
         console.error("Impossible de récupérer le profil admin.");
       }
     };

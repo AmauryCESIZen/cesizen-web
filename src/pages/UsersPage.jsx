@@ -77,34 +77,50 @@ export default function UsersPage() {
             <tbody>
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan="6">Aucun utilisateur trouvé.</td>
+                  <td colSpan="6" className="empty-state">
+                    Aucun utilisateur trouvé.
+                  </td>
                 </tr>
               ) : (
                 users.map((user) => (
                   <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>{user.email}</td>
+                    <td className="table-id">#{user.id}</td>
+
+                    <td>
+                      <div className="table-cell-title">
+                        <strong>{user.email}</strong>
+                        <span>{user.role}</span>
+                      </div>
+                    </td>
+
                     <td>{user.role}</td>
+
                     <td>
                       <StatusBadge value={user.statut} />
                     </td>
-                    <td>{new Date(user.created_at).toLocaleString("fr-FR")}</td>
-                    <td className="actions">
-                      {user.statut === "ACTIF" && (
-                        <button
-                          className="btn btn-warning"
-                          onClick={() => handleDisable(user.id)}
-                        >
-                          Désactiver
-                        </button>
-                      )}
 
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleDelete(user.id)}
-                      >
-                        Supprimer
-                      </button>
+                    <td className="table-date">
+                      {new Date(user.created_at).toLocaleString("fr-FR")}
+                    </td>
+
+                    <td>
+                      <div className="table-actions">
+                        {user.statut === "ACTIF" && (
+                          <button
+                            className="btn btn-warning"
+                            onClick={() => handleDisable(user.id)}
+                          >
+                            Désactiver
+                          </button>
+                        )}
+
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          Supprimer
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
