@@ -5,6 +5,7 @@ import {
   getAllPresets,
   updatePreset,
 } from "../services/presetService";
+import StatusBadge from "../components/StatusBadge";
 
 const initialForm = {
   code: "",
@@ -221,74 +222,68 @@ export default function PresetsPage() {
       </div>
 
       <div className="card">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Code</th>
-              <th>Rythme</th>
-              <th>Statut</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {presets.length === 0 ? (
+        <div className="table-wrapper">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="6">Aucun preset trouvé.</td>
+                <th>ID</th>
+                <th>Code</th>
+                <th>Rythme</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
-            ) : (
-              presets.map((preset) => (
-                <tr key={preset.id}>
-                  <td>{preset.id}</td>
-                  <td>
-                    <span className="tag">{preset.code}</span>
-                  </td>
-                  <td>
-                    {preset.inspiration_s}s / {preset.apnee_s}s / {preset.expiration_s}s
-                  </td>
-                  <td>
-                    <span
-                      className={
-                        preset.actif
-                          ? "badge badge-success"
-                          : "badge badge-muted"
-                      }
-                    >
-                      {preset.actif ? "ACTIF" : "INACTIF"}
-                    </span>
-                  </td>
-                  <td>
-                    {new Date(preset.created_at).toLocaleString("fr-FR")}
-                  </td>
-                  <td className="actions">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handleEdit(preset)}
-                    >
-                      Modifier
-                    </button>
+            </thead>
 
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => handleToggleActif(preset)}
-                    >
-                      {preset.actif ? "Désactiver" : "Activer"}
-                    </button>
-
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(preset.id)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
+            <tbody>
+              {presets.length === 0 ? (
+                <tr>
+                  <td colSpan="6">Aucun preset trouvé.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                presets.map((preset) => (
+                  <tr key={preset.id}>
+                    <td>{preset.id}</td>
+                    <td>
+                      <span className="tag">{preset.code}</span>
+                    </td>
+                    <td>
+                      {preset.inspiration_s}s / {preset.apnee_s}s / {preset.expiration_s}s
+                    </td>
+                    <td>
+                      <StatusBadge value={preset.actif ? "ACTIF" : "INACTIF"} />
+                    </td>
+                    <td>
+                      {new Date(preset.created_at).toLocaleString("fr-FR")}
+                    </td>
+                    <td className="actions">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleEdit(preset)}
+                      >
+                        Modifier
+                      </button>
+
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => handleToggleActif(preset)}
+                      >
+                        {preset.actif ? "Désactiver" : "Activer"}
+                      </button>
+
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(preset.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

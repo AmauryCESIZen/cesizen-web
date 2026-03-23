@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { deleteUser, disableUser, getAllUsers } from "../services/userService";
+import StatusBadge from "../components/StatusBadge";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -60,61 +61,57 @@ export default function UsersPage() {
       {error && <p className="error">{error}</p>}
 
       <div className="card">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Statut</th>
-              <th>Créé le</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {users.length === 0 ? (
+        <div className="table-wrapper">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="6">Aucun utilisateur trouvé.</td>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+                <th>Créé le</th>
+                <th>Actions</th>
               </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <span
-                      className={
-                        user.statut === "ACTIF" ? "badge badge-success" : "badge badge-muted"
-                      }
-                    >
-                      {user.statut}
-                    </span>
-                  </td>
-                  <td>{new Date(user.created_at).toLocaleString("fr-FR")}</td>
-                  <td className="actions">
-                    {user.statut === "ACTIF" && (
-                      <button
-                        className="btn btn-warning"
-                        onClick={() => handleDisable(user.id)}
-                      >
-                        Désactiver
-                      </button>
-                    )}
+            </thead>
 
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(user.id)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
+            <tbody>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan="6">Aucun utilisateur trouvé.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <StatusBadge value={user.statut} />
+                    </td>
+                    <td>{new Date(user.created_at).toLocaleString("fr-FR")}</td>
+                    <td className="actions">
+                      {user.statut === "ACTIF" && (
+                        <button
+                          className="btn btn-warning"
+                          onClick={() => handleDisable(user.id)}
+                        >
+                          Désactiver
+                        </button>
+                      )}
+
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

@@ -1,16 +1,39 @@
 import { NavLink } from "react-router-dom";
+import logo from "../assets/cesizen-logo.png";
+
+const navItems = [
+  { to: "/admin", label: "Dashboard", end: true },
+  { to: "/admin/users", label: "Utilisateurs" },
+  { to: "/admin/contents", label: "Contenus" },
+  { to: "/admin/categories", label: "Catégories" },
+  { to: "/admin/presets", label: "Presets" },
+];
 
 export default function Sidebar() {
   return (
     <aside className="sidebar">
-      <h2>CESIZen Admin</h2>
+      <div className="sidebar-brand">
+        <img src={logo} alt="Logo CESIZen" className="sidebar-logo" />
 
-      <nav>
-        <NavLink to="/admin">Dashboard</NavLink>
-        <NavLink to="/admin/users">Utilisateurs</NavLink>
-        <NavLink to="/admin/contents">Contenus</NavLink>
-        <NavLink to="/admin/categories">Catégories</NavLink>
-        <NavLink to="/admin/presets">Presets</NavLink>
+        <div>
+          <h2>CESIZen</h2>
+          <p>Back-Office</p>
+        </div>
+      </div>
+
+      <nav className="sidebar-nav">
+        {navItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
       </nav>
     </aside>
   );
