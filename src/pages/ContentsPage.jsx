@@ -126,6 +126,11 @@ export default function ContentsPage() {
     }
   };
 
+  const truncate = (text, max = 90) => {
+  if (!text) return "";
+  return text.length > max ? `${text.slice(0, max)}…` : text;
+};
+
   if (loading) {
     return (
       <section>
@@ -226,22 +231,36 @@ export default function ContentsPage() {
             <tbody>
               {contents.length === 0 ? (
                 <tr>
-                  <td colSpan="6">Aucun contenu trouvé.</td>
+                  <td colSpan="6" className="empty-state">
+                    Aucun contenu trouvé.
+                  </td>
                 </tr>
               ) : (
                 contents.map((content) => (
                   <tr key={content.id}>
-                    <td>{content.id}</td>
-                    <td>{content.title}</td>
+                    <td className="table-id">#{content.id}</td>
+
+                    <td>
+                      <div className="table-cell-title">
+                        <strong>{content.title}</strong>
+                        <span>{truncate(content.body, 80)}</span>
+                      </div>
+                    </td>
 
                     <td>
                       {content.categories && content.categories.length > 0 ? (
                         <div className="tag-list">
-                          {content.categories.map((category) => (
+                          {content.categories.slice(0, 2).map((category) => (
                             <span key={category.id} className="tag">
                               {category.name}
                             </span>
                           ))}
+
+                          {content.categories.length > 2 && (
+                            <span className="tag tag-more">
+                              +{content.categories.length - 2}
+                            </span>
+                          )}
                         </div>
                       ) : (
                         <span className="text-muted">Aucune</span>
@@ -249,32 +268,36 @@ export default function ContentsPage() {
                     </td>
 
                     <td>
-                      <StatusBadge value={content.status} />    
+                      <StatusBadge value={content.status} />
                     </td>
 
-                    <td>{new Date(content.created_at).toLocaleString("fr-FR")}</td>
+                    <td className="table-date">
+                      {new Date(content.created_at).toLocaleString("fr-FR")}
+                    </td>
 
-                    <td className="actions">
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleEdit(content)}
-                      >
-                        Modifier
-                      </button>
+                    <td>
+                      <div className="table-actions">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleEdit(content)}
+                        >
+                          Modifier
+                        </button>
 
-                      <button
-                        className="btn btn-warning"
-                        onClick={() => handleToggleStatus(content)}
-                      >
-                        {content.status === "PUBLIE" ? "Dépublier" : "Publier"}
-                      </button>
+                        <button
+                          className="btn btn-warning"
+                          onClick={() => handleToggleStatus(content)}
+                        >
+                          {content.status === "PUBLIE" ? "Dépublier" : "Publier"}
+                        </button>
 
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleDelete(content.id)}
-                      >
-                        Supprimer
-                      </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(content.id)}
+                        >
+                          Supprimer
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

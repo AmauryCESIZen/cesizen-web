@@ -142,30 +142,39 @@ export default function CategoriesPage() {
             <tbody>
               {categories.length === 0 ? (
                 <tr>
-                  <td colSpan="4">Aucune catégorie trouvée.</td>
+                  <td colSpan="4" className="empty-state">
+                    Aucune catégorie trouvée.
+                  </td>
                 </tr>
               ) : (
                 categories.map((category) => (
                   <tr key={category.id}>
-                    <td>{category.id}</td>
-                    <td>{category.name}</td>
+                    <td className="table-id">#{category.id}</td>
+
                     <td>
+                      <span className="tag">{category.name}</span>
+                    </td>
+
+                    <td className="table-date">
                       {new Date(category.created_at).toLocaleString("fr-FR")}
                     </td>
-                    <td className="actions">
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleEdit(category)}
-                      >
-                        Modifier
-                      </button>
 
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleDelete(category.id)}
-                      >
-                        Supprimer
-                      </button>
+                    <td>
+                      <div className="table-actions">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleEdit(category)}
+                        >
+                          Modifier
+                        </button>
+
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(category.id)}
+                        >
+                          Supprimer
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
