@@ -214,3 +214,23 @@ input {
   align-items: center;
   gap: 8px;
 }
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #d7efe8;
+  color: #2f6f64;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #64748b;
+}
