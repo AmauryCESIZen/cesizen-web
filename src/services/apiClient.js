@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "../utils/authStorage";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: "http://localhost:3546/api",
   headers: {
     "Content-Type": "application/json",
   },
