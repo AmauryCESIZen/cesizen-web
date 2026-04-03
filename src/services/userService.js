@@ -14,3 +14,8 @@ export const deleteUser = async (id) => {
   const response = await apiClient.delete(`/users/${id}`);
   return response.data;
 };
+
+export const reactivateUser = async (id) => {
+  const response = await apiClient.put(`/users/${id}`, { statut: "ACTIF" });
+  return response.data;
+};
