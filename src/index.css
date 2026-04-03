@@ -133,6 +133,36 @@ p {
   color: white;
 }
 
+.btn-warning {
+  background-color: #F59E0B;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-warning:hover {
+  background-color: #D97706;
+}
+
+.btn-success {
+  background-color: #22C55E;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.btn-success:hover {
+  background-color: #16A34A;
+}
+
 .badge {
   display: inline-block;
   padding: 6px 10px;
