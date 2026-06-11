@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteUser, disableUser, getAllUsers } from "../services/userService";
+import { deleteUser, disableUser, getAllUsers, reactivateUser } from "../services/userService";
 import StatusBadge from "../components/StatusBadge";
 
 export default function UsersPage() {
@@ -30,6 +30,15 @@ export default function UsersPage() {
       await loadUsers();
     } catch (err) {
       setError(err?.response?.data?.message || "Impossible de désactiver l'utilisateur.");
+    }
+  };
+
+  const handleReactivate = async (id) => {
+    try {
+      await reactivateUser(id);
+      await loadUsers();
+    } catch (err) {
+      setError(err?.response?.data?.message || "Impossible de réactiver l'utilisateur.");
     }
   };
 
@@ -105,12 +114,19 @@ export default function UsersPage() {
 
                     <td>
                       <div className="table-actions">
-                        {user.statut === "ACTIF" && (
+                        {user.statut === "ACTIF" ? (
                           <button
                             className="btn btn-warning"
                             onClick={() => handleDisable(user.id)}
                           >
                             Désactiver
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-success"
+                            onClick={() => handleReactivate(user.id)}
+                          >
+                            Réactiver
                           </button>
                         )}
 
