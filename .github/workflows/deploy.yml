@@ -1,9 +1,10 @@
 name: Deploy Web
 
-# Déclenchement : à chaque push sur develop
+# Déclenchement : à la publication d'un tag de version (ex. v1.0.0)
 on:
   push:
-    branches: [develop]
+    tags:
+      - "v*"
 
 jobs:
   # ── 1. Lint (vérification du code) ───────────────────────────
@@ -19,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  # ── 2. Construction et publication de l'image ────────────────
+  # ── 2. Construction et publication de l'image (taguée) ───────
   build-and-push:
     name: Build et push de l'image Docker
     runs-on: ubuntu-latest
@@ -37,19 +38,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Préparation des tags d'image
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/amaurycesizen/cesizen-web
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+
       - name: Build et push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/amaurycesizen/cesizen-web:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           # L'API est sur le même domaine, accessible via /api (chemin relatif)
           build-args: |
             VITE_API_URL=/api
 
   # ── 3. Déploiement sur la VM via SSH ─────────────────────────
   deploy:
-    name: Déploiement sur la VM
+    name: Déploiement sur la VM (production)
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
