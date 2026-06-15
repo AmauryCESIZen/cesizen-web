@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <header className="header">
       <div>
-        <strong>Back-Office CESIZen TEST TAG</strong>
+        <strong>Back-Office CESIZen</strong>
       </div>
 
       <div className="header-right">
