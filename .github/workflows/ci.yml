@@ -1,0 +1,69 @@
+name: CI
+
+# Déclenchement : à chaque push et chaque Pull Request sur main et develop
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # ── Job 1 : analyses du code ─────────────────────────
+  lint:
+    name: Lint (ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Analyse ESLint
+        run: npm run lint
+
+  # ── Job 2 : compilation ─────────
+  build:
+    name: Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Build de production
+        run: npm run build
+
+  # ── Job 3 : audit de sécurité des dépendances ────────────────
+  audit:
+    name: Audit de sécurité des dépendances
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Audit npm (niveau high)
+        run: npm audit --audit-level=high
