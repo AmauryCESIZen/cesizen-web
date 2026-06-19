@@ -1,13 +1,13 @@
 name: Deploy Web
 
-# Déclenchement : à la publication d'un tag de version (ex. v1.0.0)
+# Déclenchement : à la publication d'un tag de version 
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  # ── 1. Lint (vérification du code) ───────────────────────────
+  # ── 1. Lint ───────────────────────────
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  # ── 2. Construction et publication de l'image (taguée) ───────
+  # ── 2. Construction et publication de l'image ───────
   build-and-push:
     name: Build et push de l'image Docker
     runs-on: ubuntu-latest
@@ -55,7 +55,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # L'API est sur le même domaine, accessible via /api (chemin relatif)
           build-args: |
             VITE_API_URL=/api
 
