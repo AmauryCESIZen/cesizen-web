@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <header className="header">
       <div>
-        <strong>Back-Office CESIZen TEST PUSH MAIN</strong>
+        <strong>Back-Office CESIZen BONSOIR</strong>
       </div>
 
       <div className="header-right">
